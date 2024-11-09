@@ -130,7 +130,7 @@ const handleQuantitySelect = (selectedQuantity) => {
         onContextMenu={(e) => e.preventDefault()}
       >
         <span className="text-xl mb-0.5">{item.icon}</span>
-        <span className="text-xs text-center truncate w-full">{item.name}</span>
+        <span className="text-xs text-center text-gray-500 truncate w-full">{item.name}</span>
         <span className="text-xs text-gray-400">x{item.quantity}</span>
       </div>
       

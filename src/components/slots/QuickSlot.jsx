@@ -102,7 +102,7 @@ const handleQuantitySelect = (selectedQuantity) => {
               {index + 1}
             </div>
             <span className="text-xl mb-0.5">{item.icon}</span>
-            <span className="text-xs text-center truncate w-full">
+            <span className="text-xs text-center truncate w-full text-gray-500" >
               {item.name}
             </span>
             <span className="text-xs text-gray-400">x{item.quantity}</span>

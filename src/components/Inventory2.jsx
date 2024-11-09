@@ -147,7 +147,7 @@ export default function AestheticInventory() {
 
     return emptyInventory;
   };
-
+ 
   const [showSettings, setShowSettings] = useState(false);
   const [inventory, setInventory] = useState(getInitialInventoryState());
   const [quickSlots, setQuickSlots] = useState(Array(4).fill(null));
@@ -478,22 +478,47 @@ const handleEquipItem = (item, slotName) => {
             ...targetItem,
             quantity: targetItem.quantity + droppedItem.quantity
           };
+          // Clear source quickslot since all items were stacked
+          setQuickSlots(prev => {
+            const newQuickSlots = [...prev];
+            newQuickSlots[droppedItem.sourceIndex] = null;
+            return newQuickSlots;
+          });
         } else {
-          // Place in inventory
-          newInventory[targetIndex] = {
-            ...droppedItem,
-            sourceType: undefined,
-            sourceIndex: undefined
-          };
+          // Handle swapping or placing in inventory
+          if (targetItem) {
+            // Swap items
+            newInventory[targetIndex] = {
+              ...droppedItem,
+              sourceType: undefined,
+              sourceIndex: undefined
+            };
+            // Move inventory item to quickslot
+            setQuickSlots(prev => {
+              const newQuickSlots = [...prev];
+              newQuickSlots[droppedItem.sourceIndex] = {
+                ...targetItem,
+                sourceType: undefined,
+                sourceIndex: undefined
+              };
+              return newQuickSlots;
+            });
+          } else {
+            // Just place in empty inventory slot
+            newInventory[targetIndex] = {
+              ...droppedItem,
+              sourceType: undefined,
+              sourceIndex: undefined
+            };
+            // Clear source quickslot
+            setQuickSlots(prev => {
+              const newQuickSlots = [...prev];
+              newQuickSlots[droppedItem.sourceIndex] = null;
+              return newQuickSlots;
+            });
+          }
         }
         return newInventory;
-      });
-  
-      setQuickSlots(prev => {
-        const newQuickSlots = [...prev];
-        // Clear source quickslot
-        newQuickSlots[droppedItem.sourceIndex] = null;
-        return newQuickSlots;
       });
     }
   };
@@ -541,16 +566,17 @@ const handleEquipItem = (item, slotName) => {
       // Handle full inventory item
       setQuickSlots(prev => {
         const newQuickSlots = [...prev];
-        if (targetQuickSlotItem && targetQuickSlotItem.id === droppedItem.id) {
-          // Stack items
+        // If there's an item in the target quickslot, we'll swap it
+        if (targetQuickSlotItem) {
           newQuickSlots[targetIndex] = {
-            ...targetQuickSlotItem,
-            quantity: targetQuickSlotItem.quantity + droppedItem.quantity
+            ...sourceInventoryItem,
+            sourceType: undefined,
+            sourceIndex: undefined
           };
         } else {
-          // Place in quickslot
+          // Just place the inventory item in the empty quickslot
           newQuickSlots[targetIndex] = {
-            ...droppedItem,
+            ...sourceInventoryItem,
             sourceType: undefined,
             sourceIndex: undefined
           };
@@ -560,13 +586,21 @@ const handleEquipItem = (item, slotName) => {
   
       setInventory(prev => {
         const newInventory = [...prev];
-        // Clear source inventory slot
-        newInventory[droppedItem.sourceIndex] = null;
+        // If there was an item in the quickslot, place it in the inventory
+        if (targetQuickSlotItem) {
+          newInventory[droppedItem.sourceIndex] = {
+            ...targetQuickSlotItem,
+            sourceType: undefined,
+            sourceIndex: undefined
+          };
+        } else {
+          // Just clear the source inventory slot
+          newInventory[droppedItem.sourceIndex] = null;
+        }
         return newInventory;
       });
     }
   };
-
 
 
 

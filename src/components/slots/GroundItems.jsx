@@ -36,7 +36,7 @@ const GroundItems = ({ items, theme, handlePickupItem }) => {
           className={`${theme.secondary} ${theme.hover} p-2 rounded aspect-square flex flex-col items-center justify-center cursor-pointer`}
         >
           <span className="text-2xl">{item.icon}</span>
-          <span className="text-xs text-center truncate w-full">
+          <span className="text-xs text-center truncate w-full text-gray-500">
             {item.name}
           </span>
           <span className="text-xs text-gray-400">x{item.quantity}</span>
