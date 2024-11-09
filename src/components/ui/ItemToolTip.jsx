@@ -26,3 +26,4 @@ const ItemTooltip = ({ item }) => {
     );
   };
   
+  export default ItemTooltip;

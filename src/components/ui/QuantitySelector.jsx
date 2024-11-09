@@ -1,3 +1,4 @@
+import React from "react";
 const QuantitySelector = ({ item, onSelect, onClose }) => {
     const [quantity, setQuantity] = React.useState(1);
   
@@ -43,3 +44,4 @@ const QuantitySelector = ({ item, onSelect, onClose }) => {
       </div>
     );
   };
+  export default QuantitySelector;

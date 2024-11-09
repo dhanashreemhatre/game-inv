@@ -1,5 +1,9 @@
 import { useDrag } from "./../../DragContext";
+import React from "react";
+import QuantitySelector from "../ui/QuantitySelector";
+import ItemTooltip from "../ui/ItemToolTip";
 
+// Enhanced InventoryItem.jsx
 const InventoryItem = ({
   item,
   theme,
@@ -7,22 +11,43 @@ const InventoryItem = ({
   onDrop,
   layout,
   handleDropToGround,
+  updateItemQuantity,
   index,
 }) => {
   const { setDraggedItem, setDragPosition, setIsDragging } = useDrag();
+  const [showTooltip, setShowTooltip] = React.useState(false);
+  const [showQuantitySelector, setShowQuantitySelector] = React.useState(false);
+  const [tooltipPosition, setTooltipPosition] = React.useState({ x: 0, y: 0 });
+
+  const handleMouseEnter = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setTooltipPosition({
+      x: rect.left + rect.width / 2,
+      y: rect.top,
+    });
+    setShowTooltip(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowTooltip(false);
+  };
 
   const handleMouseDown = (e) => {
-    // If it's right click, don't initiate drag
     if (e.button === 2) {
       e.preventDefault();
       return;
     }
 
-    // Start drag on left mouse down
+    if (e.shiftKey && item.quantity > 1) {
+      e.preventDefault();
+      setShowQuantitySelector(true);
+      return;
+    }
+
     let dragStarted = false;
     const startX = e.clientX;
     const startY = e.clientY;
-    const clickedElement = e.currentTarget; // Store the clicked element
+    const clickedElement = e.currentTarget;
 
     const handleMouseMove = (moveEvent) => {
       const deltaX = moveEvent.clientX - startX;
@@ -48,9 +73,7 @@ const InventoryItem = ({
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
 
-      // If no drag occurred, treat it as a click
       if (!dragStarted && upEvent.button === 0) {
-        // Create a synthetic click event with the original element
         onClick({
           ...upEvent,
           currentTarget: clickedElement,
@@ -64,21 +87,69 @@ const InventoryItem = ({
     window.addEventListener("mouseup", handleMouseUp);
   };
 
+  // 4. Update the QuantitySelector component's handleSelect function
+const handleQuantitySelect = (selectedQuantity) => {
+  if (!item || selectedQuantity <= 0 || selectedQuantity > item.quantity) return;
+  
+  // const remainingQuantity = item.quantity - selectedQuantity;
+  
+  // Update the original item quantity
+  // updateItemQuantity(index, remainingQuantity);
+  
+  // Create the split item for dragging
+  const splitItem = {
+    ...item,
+    quantity: selectedQuantity,
+    sourceType: "inventory",
+    sourceIndex: index,
+    splitItem: true
+  };
+  
+  setDraggedItem(splitItem);
+  setIsDragging(true);
+  setShowQuantitySelector(false);
+  
+  if (window.event) {
+    setDragPosition({
+      x: window.event.clientX,
+      y: window.event.clientY
+    });
+  }
+};
   return (
-    <div
-      data-droppable="true"
-      data-index={index}
-      data-type="inventory"
-      className={`${theme.secondary} aspect-square rounded ${theme.hover} ${layout.slotStyle}
-        p-2 flex flex-col items-center justify-center cursor-move transition-all duration-200`}
-      onMouseDown={handleMouseDown}
-      onContextMenu={(e) => e.preventDefault()}
-    >
-      <span className="text-xl mb-0.5">{item.icon}</span>
-      <span className="text-xs text-center truncate w-full">{item.name}</span>
-      <span className="text-xs text-gray-400">x{item.quantity}</span>
-    </div>
+    <>
+      <div
+        data-droppable="true"
+        data-index={index}
+        data-type="inventory"
+        className={`${theme.secondary} aspect-square rounded ${theme.hover} ${layout.slotStyle}
+          p-2 flex flex-col items-center justify-center cursor-move transition-all duration-200 relative`}
+        onMouseDown={handleMouseDown}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onContextMenu={(e) => e.preventDefault()}
+      >
+        <span className="text-xl mb-0.5">{item.icon}</span>
+        <span className="text-xs text-center truncate w-full">{item.name}</span>
+        <span className="text-xs text-gray-400">x{item.quantity}</span>
+      </div>
+      
+      {showTooltip && (
+        <div style={{ position: 'fixed', left: tooltipPosition.x, top: tooltipPosition.y }}>
+          <ItemTooltip item={item} />
+        </div>
+      )}
+      
+      {showQuantitySelector && (
+        <QuantitySelector
+          item={item}
+          onSelect={handleQuantitySelect}
+          onClose={() => setShowQuantitySelector(false)}
+        />
+      )}
+    </>
   );
 };
 
 export default InventoryItem;
+
