@@ -1,13 +1,21 @@
-.reverse{
-  grid-template-rows: 1fr 1fr 1fr;
-  grid-auto-flow: row;
-  direction: rtl;  /* reversed horizontal */
+.reverse {
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-auto-flow: row;
+    direction: rtl; /* reversed horizontal */
 }
-.grid-center{
-  margin: auto;
-   /* Center the entire grid content */
-   justify-content: center;
-  
-   /* For centering items when there are fewer than full rows */
-   grid-auto-flow: row dense;
+.grid-center {
+    margin: auto;
+    /* Center the entire grid content */
+    justify-content: center;
+
+    /* For centering items when there are fewer than full rows */
+    grid-auto-flow: row dense;
+}
+
+
+.item-quantity-right{
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 8px;
 }

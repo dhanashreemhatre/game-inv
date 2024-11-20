@@ -13,6 +13,58 @@ const ItemMenu = ({
 }) => {
   const [playerId, setPlayerId] = useState("");
   const [giveAmount, setGiveAmount] = useState(1);
+  const trackItemUse = (item, slotIndex) => {
+    // Determine the section based on slotIndex
+    const section = slotIndex !== null ? "quickslot" : "inventory";
+    const slot =
+      slotIndex !== null
+        ? slotIndex
+        : inventory.findIndex((inv) => inv?.id === item.id);
+
+    const itemAction = {
+      action: "use",
+      item: {
+        id: item.id,
+        name: item.name,
+        quantity: 1, // Always 1 for use action
+      },
+      from: {
+        section: section,
+        slot: slot,
+      },
+    };
+
+    window.alt.emit("ItemUsed", itemAction);
+    console.log("Item used:", itemAction);
+    return itemAction;
+  };
+
+  const trackItemGive = (item, amount, targetPlayerId, slotIndex) => {
+    // Determine the section based on slotIndex
+    const section = slotIndex !== null ? "quickslot" : "inventory";
+    const slot =
+      slotIndex !== null
+        ? slotIndex
+        : inventory.findIndex((inv) => inv?.id === item.id);
+
+    const itemAction = {
+      action: "give",
+      item: {
+        id: item.id,
+        name: item.name,
+        quantity: amount,
+      },
+      from: {
+        section: section,
+        slot: slot,
+      },
+      targetPlayer: targetPlayerId,
+    };
+
+    window.alt.emit("ItemGiven", itemAction);
+    console.log("Item given:", itemAction);
+    return itemAction;
+  };
 
   useEffect(() => {
     if (showItemMenu?.item) {
@@ -45,6 +97,15 @@ const ItemMenu = ({
   };
 
   const handleUseItem = (item, slotIndex) => {
+    if (item.type === "clothing") {
+      return;
+    }
+    if (item.type !== "consumable") {
+      return; // Early return for non-consumable items
+    }
+    // Track the item use with section information
+    const actionData = trackItemUse(item, slotIndex);
+
     if (item.quantity > 1) {
       setInventory((prev) =>
         prev.map((inv) =>
@@ -76,6 +137,9 @@ const ItemMenu = ({
   const handleGiveItem = (item, slotIndex) => {
     const amountToGive = Math.min(giveAmount, item.quantity);
     if (amountToGive <= 0) return;
+
+    // Track the item give with section information
+    const actionData = trackItemGive(item, amountToGive, playerId, slotIndex);
 
     if (item.quantity > amountToGive) {
       setInventory((prev) =>
@@ -137,6 +201,7 @@ const ItemMenu = ({
       return updated;
     });
   };
+  const isConsumable = showItemMenu?.item?.type === "consumable";
 
   return (
     <div
@@ -157,7 +222,8 @@ const ItemMenu = ({
           onClick={() =>
             handleItemAction("use", showItemMenu.item, showItemMenu.slotIndex)
           }
-          className={`w-full p-2 mb-2 ${activeTheme.secondary} ${activeTheme.hover} rounded flex items-center gap-2 hover:bg-gray-700/40`}
+          disabled={showItemMenu.item.type !== "consumable"}
+          className={`w-full p-2 mb-2 ${activeTheme.secondary} ${activeTheme.hover} rounded flex items-center gap-2 hover:bg-gray-700/40  ${!isConsumable ? "hidden cursor-not-allowed" : ""}`}
         >
           <Trash2 className="w-4 h-4" /> Use Item
         </button>

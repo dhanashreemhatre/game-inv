@@ -2,6 +2,7 @@ import { useDrag } from "./../../DragContext";
 import React from "react";
 import QuantitySelector from "../ui/QuantitySelector";
 import ItemTooltip from "../ui/ItemToolTip";
+import { ItemMapping } from "./../ItemMapping";
 
 // Enhanced InventoryItem.jsx
 const InventoryItem = ({
@@ -18,6 +19,7 @@ const InventoryItem = ({
   const [showTooltip, setShowTooltip] = React.useState(false);
   const [showQuantitySelector, setShowQuantitySelector] = React.useState(false);
   const [tooltipPosition, setTooltipPosition] = React.useState({ x: 0, y: 0 });
+  const itemImage = ItemMapping[item.name]?.image;
 
   const handleMouseEnter = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -88,34 +90,35 @@ const InventoryItem = ({
   };
 
   // 4. Update the QuantitySelector component's handleSelect function
-const handleQuantitySelect = (selectedQuantity) => {
-  if (!item || selectedQuantity <= 0 || selectedQuantity > item.quantity) return;
-  
-  // const remainingQuantity = item.quantity - selectedQuantity;
-  
-  // Update the original item quantity
-  // updateItemQuantity(index, remainingQuantity);
-  
-  // Create the split item for dragging
-  const splitItem = {
-    ...item,
-    quantity: selectedQuantity,
-    sourceType: "inventory",
-    sourceIndex: index,
-    splitItem: true
+  const handleQuantitySelect = (selectedQuantity) => {
+    if (!item || selectedQuantity <= 0 || selectedQuantity > item.quantity)
+      return;
+
+    // const remainingQuantity = item.quantity - selectedQuantity;
+
+    // Update the original item quantity
+    // updateItemQuantity(index, remainingQuantity);
+
+    // Create the split item for dragging
+    const splitItem = {
+      ...item,
+      quantity: selectedQuantity,
+      sourceType: "inventory",
+      sourceIndex: index,
+      splitItem: true,
+    };
+
+    setDraggedItem(splitItem);
+    setIsDragging(true);
+    setShowQuantitySelector(false);
+
+    if (window.event) {
+      setDragPosition({
+        x: window.event.clientX,
+        y: window.event.clientY,
+      });
+    }
   };
-  
-  setDraggedItem(splitItem);
-  setIsDragging(true);
-  setShowQuantitySelector(false);
-  
-  if (window.event) {
-    setDragPosition({
-      x: window.event.clientX,
-      y: window.event.clientY
-    });
-  }
-};
   return (
     <>
       <div
@@ -129,17 +132,27 @@ const handleQuantitySelect = (selectedQuantity) => {
         onMouseLeave={handleMouseLeave}
         onContextMenu={(e) => e.preventDefault()}
       >
-        <span className="text-xl mb-0.5">{item.icon}</span>
-        <span className="text-xs text-center text-gray-500 truncate w-full">{item.name}</span>
-        <span className="text-xs text-gray-400">x{item.quantity}</span>
+        <span className="text-xl mb-0.5">
+          <img src={itemImage} alt="" height={32} width={32} />
+        </span>
+        <span className="text-xs text-center text-gray-500 truncate w-full">
+          {item.name}
+        </span>
+        <span className="text-xs text-gray-400 item-quantity-right"> {item.type !== "clothing" && item.quantity}</span>
       </div>
-      
+
       {showTooltip && (
-        <div style={{ position: 'fixed', left: tooltipPosition.x, top: tooltipPosition.y }}>
+        <div
+          style={{
+            position: "fixed",
+            left: tooltipPosition.x,
+            top: tooltipPosition.y,
+          }}
+        >
           <ItemTooltip item={item} />
         </div>
       )}
-      
+
       {showQuantitySelector && (
         <QuantitySelector
           item={item}
@@ -152,4 +165,3 @@ const handleQuantitySelect = (selectedQuantity) => {
 };
 
 export default InventoryItem;
-
