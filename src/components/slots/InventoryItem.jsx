@@ -89,29 +89,29 @@ const InventoryItem = ({
     window.addEventListener("mouseup", handleMouseUp);
   };
 
-  // 4. Update the QuantitySelector component's handleSelect function
   const handleQuantitySelect = (selectedQuantity) => {
     if (!item || selectedQuantity <= 0 || selectedQuantity > item.quantity)
       return;
-
+  
     // const remainingQuantity = item.quantity - selectedQuantity;
+    //       // Update the original item quantity
+    //   updateItemQuantity(index, remainingQuantity);
 
-    // Update the original item quantity
-    // updateItemQuantity(index, remainingQuantity);
 
-    // Create the split item for dragging
+  
+    // Create the split item for dragging/placing
     const splitItem = {
       ...item,
       quantity: selectedQuantity,
       sourceType: "inventory",
       sourceIndex: index,
-      splitItem: true,
+      splitItem: true
     };
-
+  
     setDraggedItem(splitItem);
     setIsDragging(true);
     setShowQuantitySelector(false);
-
+  
     if (window.event) {
       setDragPosition({
         x: window.event.clientX,

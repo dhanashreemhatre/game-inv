@@ -62,10 +62,10 @@ const QuickSlot = ({
     if (!item || selectedQuantity <= 0 || selectedQuantity > item.quantity)
       return;
 
-    const remainingQuantity = item.quantity - selectedQuantity;
+    // const remainingQuantity = item.quantity - selectedQuantity;
 
-    // Update the original item quantity
-    updateItemQuantity(index, remainingQuantity);
+    // // Update the original item quantity
+    // updateItemQuantity(index, remainingQuantity);
 
     // Create the split item for dragging
     const splitItem = {

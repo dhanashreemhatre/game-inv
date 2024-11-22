@@ -253,12 +253,15 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
   
         // If it's a split item
         if (droppedItem.splitItem) {
+          const sourceInventoryItem = newInventory[droppedItem.sourceIndex];
+        
           // If target slot has same item type, stack them
           if (targetItem && targetItem.id === droppedItem.id) {
             newInventory[targetIndex] = {
               ...targetItem,
               quantity: targetItem.quantity + droppedItem.quantity,
             };
+
           }
           // If target slot is empty, create new stack
           else if (!targetItem) {
@@ -269,6 +272,17 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
               sourceIndex: undefined,
             };
           }
+            const remainingQuantity =
+            sourceInventoryItem.quantity - droppedItem.quantity;
+    
+            if (remainingQuantity <= 0) {
+              newInventory[droppedItem.sourceIndex] = null;
+            } else {
+              newInventory[droppedItem.sourceIndex] = {
+                ...sourceInventoryItem,
+                quantity: remainingQuantity,
+              };
+            }
           return newInventory;
         }
   
@@ -355,34 +369,70 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
   };
 
   
-  // 3. Update handleDropToGround to handle split items
   const handleDropToGround = (item) => {
     if (!item) return;
     const fromSection = item.sourceType;
     const fromSlot = item.sourceType === "equipment" ? item.sourceSlot : item.sourceIndex;
     const toSection = "ground";
     const toSlot = null;
-    console.log("ohh i drop the item",item)
+  
     if (item.name === "") {
-      return
+      return;
     }
+  
     trackItemMovement({
       ...item,
       slot: item.sourceType === "equipment" ? item.sourceSlot : (item.slot || fromSlot + 1)
     }, fromSection, toSection, fromSlot, toSlot);
+  
     const groundItem = {
       id: item.id,
       name: item.name,
       icon: item.icon,
-      type: item.type, // Preserve the type
+      type: item.type,
       quantity: item.quantity,
       slot: item.sourceType === "equipment" ? item.sourceSlot : item.slot
     };
-
+  
     setGroundItems((prev) => [...prev, groundItem]);
-
-    // Only clear source if it's not a split item
-    if (!item.splitItem) {
+  
+    // Handle split items from inventory or quickslot
+    if (item.splitItem) {
+      if (item.sourceType === "inventory") {
+        setInventory((prev) => {
+          const newInventory = [...prev];
+          const sourceItem = newInventory[item.sourceIndex];
+          const remainingQuantity = sourceItem.quantity - item.quantity;
+  
+          if (remainingQuantity <= 0) {
+            newInventory[item.sourceIndex] = null;
+          } else {
+            newInventory[item.sourceIndex] = {
+              ...sourceItem,
+              quantity: remainingQuantity,
+            };
+          }
+          return newInventory;
+        });
+      } else if (item.sourceType === "quickslot") {
+        setQuickSlots((prev) => {
+          const newQuickSlots = [...prev];
+          const sourceItem = newQuickSlots[item.sourceIndex];
+          const remainingQuantity = sourceItem.quantity - item.quantity;
+  
+          if (remainingQuantity <= 0) {
+            newQuickSlots[item.sourceIndex] = null;
+          } else {
+            newQuickSlots[item.sourceIndex] = {
+              ...sourceItem,
+              quantity: remainingQuantity,
+            };
+          }
+          return newQuickSlots;
+        });
+      }
+    } else {
+      // Handle full items from different sources
       if (item.sourceType === "inventory") {
         setInventory((prev) => {
           const newInventory = [...prev];
@@ -396,16 +446,13 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
           return newQuickSlots;
         });
       } else if (item.sourceType === "equipment") {
-        
         setEquipment((prev) => {
-          // Equipment is an object, so we need to handle it differently
           const newEquipment = {...prev};
-          // Clear the specific equipment slot using the sourceSlot property
           if (item.sourceSlot) {
-              newEquipment[item.sourceSlot] = null;
+            newEquipment[item.sourceSlot] = null;
           }
           return newEquipment;
-      });
+        });
       }
     }
   };
@@ -497,6 +544,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
   const fromSlot = droppedItem.sourceIndex;
   const toSection = "quickslot";
   const toSlot = targetIndex;
+  console.log(quickSlots[droppedItem.sourceIndex])
   if (droppedItem.name === "") {
     return;
   }
@@ -522,6 +570,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
     setQuickSlots((prev) => {
       const newQuickSlots = [...prev];
       if (droppedItem.splitItem) {
+        const sourceQuickSlot = quickSlots[droppedItem.sourceIndex];
         const targetItem = newQuickSlots[targetIndex];
         if (targetItem && targetItem.id === droppedItem.id) {
           newQuickSlots[targetIndex] = {
@@ -536,11 +585,22 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
             sourceIndex: undefined,
           };
         }
+        const remainingQuantity =
+          sourceQuickSlot.quantity - droppedItem.quantity;
+
+        if (remainingQuantity <= 0) {
+          newQuickSlots[droppedItem.sourceIndex] = null;
+        } else {
+          newQuickSlots[droppedItem.sourceIndex] = {
+            ...sourceQuickSlot,
+            quantity: remainingQuantity,
+          }}
       } else {
         const temp = newQuickSlots[targetIndex];
         newQuickSlots[targetIndex] = newQuickSlots[droppedItem.sourceIndex];
         newQuickSlots[droppedItem.sourceIndex] = temp;
       }
+      
       return newQuickSlots;
     });
   } else if (droppedItem.sourceType === "inventory") {
