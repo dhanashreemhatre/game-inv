@@ -197,6 +197,6 @@ window.alt.on("open", (data) => OpenInventory(data));
 window.alt.on("close", () => CloseInventory());
 window.alt.on("update", (data) => UpdateInventory(data));
 
-window.alt.on("openHotbar", (data) => window.openHotbar(data));
+window.alt.on("openHotbar", (data,slot) => window.openHotbar(data,slot));
 window.alt.on("closeHotbar", () => window.closeHotbar());
 window.alt.on("selectItem", (slot) => window.hotbarSelectItem(slot));

@@ -1076,8 +1076,8 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
           </div>
           {/* Ground Items Panel - Updated to be more compact */}
 
-          <div className={`col-span-2 rounded-lg flex flex-col`}>
-            <div className={`grid ${currentLayout.groundItemsGrid}`}>
+          <div className={`flex-1 overflow-y-auto`}>
+            <div className={`grid ${currentLayout.groundItemsGrid} h-36 overflow-x-auto`}>
               <GroundItems
                 items={groundItems}
                 theme={activeTheme}

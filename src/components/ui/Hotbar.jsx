@@ -25,7 +25,7 @@ const Hotbar = () => {
   };
 
   // Method to open hotbar with items
-  const openHotbar = (newItems) => {
+  const openHotbar = (newItems,slot) => {
     setItems(newItems);
     setIsVisible(true);
   };
