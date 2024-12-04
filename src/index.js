@@ -33,10 +33,10 @@ const formatInventoryData = (data) => {
     })),
     QuickItems: (data.QuickItems || []).map((item, index) => ({
       name: item.name || "",
-      type: item.type || "clothing",
+      type: item.type || "",
       quantity: item.quantity || 1,
       slot: item.slot || (index + 1).toString(),
-      id: item.id || `quick-${index}`,
+      id: item.id || "",
     })),
     GroundItems: (data.GroundItems || []).map((item) => ({
       name: item.name || "",
@@ -77,7 +77,7 @@ function OpenInventory(inventoryData = {}) {
       if (slotIndex >= 0 && slotIndex < 20) {
         inventorySlots[slotIndex] = {
           ...item,
-          id: Math.random().toString(),
+          id: item.name,
         };
       }
     }
@@ -93,7 +93,7 @@ function OpenInventory(inventoryData = {}) {
       if (slotIndex >= 0 && slotIndex < 4) {
         quickSlotItems[slotIndex] = {
           ...item,
-          id: Math.random().toString(),
+          id: item.name,
         };
       }
     }
@@ -104,7 +104,7 @@ function OpenInventory(inventoryData = {}) {
   // Update ground items
   const groundItems = formattedData.GroundItems.map((item) => ({
     ...item,
-    id: Math.random().toString(),
+    id: item.name,
   }));
   updateInventoryState("setGroundItems", groundItems);
 }
@@ -130,7 +130,7 @@ function UpdateInventory(inventoryData) {
       if (slotIndex >= 0 && slotIndex < 20) {
         inventorySlots[slotIndex] = {
           ...item,
-          id: Math.random().toString(),
+          id: item.name,
         };
       }
     }
@@ -146,7 +146,7 @@ function UpdateInventory(inventoryData) {
       if (slotIndex >= 0 && slotIndex < 4) {
         quickSlotItems[slotIndex] = {
           ...item,
-          id: Math.random().toString(),
+          id: item.name,
         };
       }
     }
@@ -157,7 +157,7 @@ function UpdateInventory(inventoryData) {
   // Update ground items
   const groundItems = formattedData.GroundItems.map((item) => ({
     ...item,
-    id: Math.random().toString(),
+    id: item.name,
   }));
   updateInventoryState("setGroundItems", groundItems);
 }

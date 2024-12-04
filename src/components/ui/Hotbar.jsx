@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ItemMapping } from '../ItemMapping';
 
 const Hotbar = () => {
-  const [selectedSlot, setSelectedSlot] = useState(0);
+  const [selectedSlot, setSelectedSlot] = useState();
   const [isVisible, setIsVisible] = useState(false);
   const [items, setItems] = useState([]);
   const slots = [1, 2, 3, 4];

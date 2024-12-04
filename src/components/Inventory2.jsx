@@ -103,7 +103,7 @@ export default function AestheticInventory() {
       if (item.slot && item.slot <= 20) {
         emptyInventory[item.slot - 1] = {
           ...item,
-          id: item.id?.toString() || Math.random().toString(),
+          id: item.id?.toString() || item.name,
         };
       }
     });
@@ -136,7 +136,7 @@ export default function AestheticInventory() {
           if (slotIndex >= 0 && slotIndex < 4) {
             emptyQuickSlots[slotIndex] = {
               ...item,
-              id: item.id || Math.random().toString(),
+              id: item.id || item.name,
             };
           }
         }
@@ -884,7 +884,9 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
     console.log("we pickup this item",item)
     
     trackItemMovement({
-      ...item,
+      id:item.id,
+      name:item.name,
+      quantity:quantityToPickup,
       type: item.type,
       slot: item.slot || toSlot + 1
     }, fromSection, toSection, fromSlot, toSlot);

@@ -33,7 +33,7 @@ export const updateInventorySection = (section, data) => {
           if (item.slot) {
             inventoryArray[item.slot - 1] = {
               ...item,
-              id: Math.random().toString(),
+              id: item.name,
             };
           }
         });
@@ -49,7 +49,7 @@ export const updateInventorySection = (section, data) => {
             if (slotIndex >= 0 && slotIndex < 20) {
               inventoryArray[slotIndex] = {
                 ...item,
-                id: Math.random().toString(),
+                id: item.name,
               };
             }
           }
@@ -67,7 +67,7 @@ export const updateInventorySection = (section, data) => {
             if (slotIndex >= 0 && slotIndex < 4) {
               quickSlotsArray[slotIndex] = {
                 ...item,
-                id: Math.random().toString(),
+                id: item.name,
               };
             }
           }
@@ -81,7 +81,7 @@ export const updateInventorySection = (section, data) => {
         inventoryStateSetters.setGroundItems(
           data.map((item) => ({
             ...item,
-            id: Math.random().toString(),
+            id: item.name,
           })),
         );
       }
@@ -110,7 +110,7 @@ export const setupInitialInventory = (data) => {
         if (slotIndex >= 0 && slotIndex < 20) {
           inventoryArray[slotIndex] = {
             ...item,
-            id: Math.random().toString(),
+            id: item.name,
           };
         }
       }
@@ -127,7 +127,7 @@ export const setupInitialInventory = (data) => {
         if (slotIndex >= 0 && slotIndex < 4) {
           quickSlotsArray[slotIndex] = {
             ...item,
-            id: Math.random().toString(),
+            id: item.name,
           };
         }
       }
@@ -140,7 +140,7 @@ export const setupInitialInventory = (data) => {
     inventoryStateSetters.setGroundItems(
       data.GroundItems.map((item) => ({
         ...item,
-        id: Math.random().toString(),
+        id: item.name,
       })),
     );
   }
