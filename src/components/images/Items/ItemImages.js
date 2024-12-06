@@ -1,17 +1,129 @@
-import apple from "./Apple-Icon.svg";
-import banana from "./Banana-Icon.svg";
-import firstAidKit from "./First-Aid-Kit-Icon.svg";
-import cake from "./Free-Cake-Icons.svg";
-import gunBackpack from "./Free-Gun-Icon-Backpack.svg";
-import gun from "./Gun-Icon.svg";
-import binoculars from "./Gun-Binoculars-Icon.svg";
-import handcuffs from "./Gun-Icon-Handcuffs.svg";
-import helmet from "./Gun-Icon-Helmet.svg";
-import sniper from "./Gun-Icon-Sniper.svg";
-import knife from "./Free-Knife-Icon.svg";
-import poloShirt from "./Polo-Shirt-Icon.svg";
-import shirt from "./Shirt-Icon.svg";
+// import apple from "./Apple-Icon.svg";
+// import banana from "./Banana-Icon.svg";
+// import firstAidKit from "./First-Aid-Kit-Icon.svg";
+// import cake from "./Free-Cake-Icons.svg";
+// import gunBackpack from "./Free-Gun-Icon-Backpack.svg";
+// import gun from "./Gun-Icon.svg";
+// import binoculars from "./Gun-Binoculars-Icon.svg";
+// import handcuffs from "./Gun-Icon-Handcuffs.svg";
+// import helmet from "./Gun-Icon-Helmet.svg";
+// import sniper from "./Gun-Icon-Sniper.svg";
+// import poloShirt from "./Polo-Shirt-Icon.svg";
+// import shirt from "./Shirt-Icon.svg";
 
-export {apple,banana,firstAidKit,cake,gunBackpack,gun, binoculars, handcuffs, helmet, sniper, knife, poloShirt
-    ,shirt
-}
+
+// export {apple,banana,firstAidKit,cake,gunBackpack,gun, binoculars, handcuffs, helmet, sniper, poloShirt
+//     ,shirt
+// }
+
+import gadgetParachute from './weapon_images/gadget_parachute.png'
+import acidpackage from './weapon_images/weapon_acidpackage.png'
+import advancedrifle from './weapon_images/weapon_advancedrifle.png'
+import appistol from './weapon_images/weapon_appistol.png'
+import assaultrifle from './weapon_images/weapon_assaultrifle.png'
+import assaultrifleMk2 from './weapon_images/weapon_assaultrifle_mk2.png'
+import assaultshotgun from './weapon_images/weapon_assaultshotgun.png'
+import assaultsmg from './weapon_images/weapon_assaultsmg.png'
+import autoshotgun from './weapon_images/weapon_autoshotgun.png'
+import ball from './weapon_images/weapon_ball.png'
+import bat from './weapon_images/weapon_bat.png'
+import battleaxe from './weapon_images/weapon_battleaxe.png'
+import bottle from './weapon_images/weapon_bottle.png'
+import bullpuprifle from './weapon_images/weapon_bullpuprifle.png'
+import bullpuprifleMk2 from './weapon_images/weapon_bullpuprifle_mk2.png'
+import bullpupshotgun from './weapon_images/weapon_bullpupshotgun.png'
+import bzgas from './weapon_images/weapon_bzgas.png'
+import candycane from './weapon_images/weapon_candycane.png'
+import carbinerifle from './weapon_images/weapon_carbinerifle.png'
+import carbinerifleMk2 from './weapon_images/weapon_carbinerifle_mk2.png'
+import ceramicpistol from './weapon_images/weapon_ceramicpistol.png'
+import combatmg from './weapon_images/weapon_combatmg.png'
+import combatmgMk2 from './weapon_images/weapon_combatmg_mk2.png'
+import combatpdw from './weapon_images/weapon_combatpdw.png'
+import combatpistol from './weapon_images/weapon_combatpistol.png'
+import combatshotgun from './weapon_images/weapon_combatshotgun.png'
+import compactlauncher from './weapon_images/weapon_compactlauncher.png'
+import compactrifle from './weapon_images/weapon_compactrifle.png'
+import crowbar from './weapon_images/weapon_crowbar.png'
+import dagger from './weapon_images/weapon_dagger.png'
+import dbshotgun from './weapon_images/weapon_dbshotgun.png'
+import doubleaction from './weapon_images/weapon_doubleaction.png'
+import emplauncher from './weapon_images/weapon_emplauncher.png'
+import fertilizercan from './weapon_images/weapon_fertilizercan.png'
+import fireextinguisher from './weapon_images/weapon_fireextinguisher.png'
+import firework from './weapon_images/weapon_firework.png'
+import flare from './weapon_images/weapon_flare.png'
+import flaregun from './weapon_images/weapon_flaregun.png'
+import flashlight from './weapon_images/weapon_flashlight.png'
+import gadgetpistol from './weapon_images/weapon_gadgetpistol.png'
+import golfclub from './weapon_images/weapon_golfclub.png'
+import grenade from './weapon_images/weapon_grenade.png'
+import grenadelauncher from './weapon_images/weapon_grenadelauncher.png'
+import grenadelauncherSmoke from './weapon_images/weapon_grenadelauncher_smoke.png'
+import gusenberg from './weapon_images/weapon_gusenberg.png'
+import hammer from './weapon_images/weapon_hammer.png'
+import hatchet from './weapon_images/weapon_hatchet.png'
+import hazardcan from './weapon_images/weapon_hazardcan.png'
+import heavypistol from './weapon_images/weapon_heavypistol.png'
+import heavyrifle from './weapon_images/weapon_heavyrifle.png'
+import heavyshotgun from './weapon_images/weapon_heavyshotgun.png'
+import heavysniper from './weapon_images/weapon_heavysniper.png'
+import heavysniperMk2 from './weapon_images/weapon_heavysniper_mk2.png'
+import hominglauncher from './weapon_images/weapon_hominglauncher.png'
+import knife from './weapon_images/weapon_knife.png'
+import knuckle from './weapon_images/weapon_knuckle.png'
+import machete from './weapon_images/weapon_machete.png'
+import machinepistol from './weapon_images/weapon_machinepistol.png'
+import marksmanpistol from './weapon_images/weapon_marksmanpistol.png'
+import marksmanrifle from './weapon_images/weapon_marksmanrifle.png'
+import marksmanrifleMk2 from './weapon_images/weapon_marksmanrifle_mk2.png'
+import mg from './weapon_images/weapon_mg.png'
+import microsmg from './weapon_images/weapon_microsmg.png'
+import militaryrifle from './weapon_images/weapon_militaryrifle.png'
+import minigun from './weapon_images/weapon_minigun.png'
+import minismg from './weapon_images/weapon_minismg.png'
+import molotov from './weapon_images/weapon_molotov.png'
+import musket from './weapon_images/weapon_musket.png'
+import navyrevolver from './weapon_images/weapon_navyrevolver.png'
+import nightstick from './weapon_images/weapon_nightstick.png'
+import petrolcan from './weapon_images/weapon_petrolcan.png'
+import pipebomb from './weapon_images/weapon_pipebomb.png'
+import pistol from './weapon_images/weapon_pistol.png'
+import pistol50 from './weapon_images/weapon_pistol50.png'
+import pistolxm3 from './weapon_images/weapon_pistolxm3.png'
+import pistolMk2 from './weapon_images/weapon_pistol_mk2.png'
+import poolcue from './weapon_images/weapon_poolcue.png'
+import precisionrifle from './weapon_images/weapon_precisionrifle.png'
+import proxmine from './weapon_images/weapon_proxmine.png'
+import pumpshotgun from './weapon_images/weapon_pumpshotgun.png'
+import pumpshotgunMk2 from './weapon_images/weapon_pumpshotgun_mk2.png'
+import railgun from './weapon_images/weapon_railgun.png'
+import railgunxm3 from './weapon_images/weapon_railgunxm3.png'
+import raycarbine from './weapon_images/weapon_raycarbine.png'
+import rayminigun from './weapon_images/weapon_rayminigun.png'
+import raypistol from './weapon_images/weapon_raypistol.png'
+import revolver from './weapon_images/weapon_revolver.png'
+import revolverMk2 from './weapon_images/weapon_revolver_mk2.png'
+import rpg from './weapon_images/weapon_rpg.png'
+import sawnoffshotgun from './weapon_images/weapon_sawnoffshotgun.png'
+import smg from './weapon_images/weapon_smg.png'
+import smgMk2 from './weapon_images/weapon_smg_mk2.png'
+import smokegrenade from './weapon_images/weapon_smokegrenade.png'
+import sniperrifle from './weapon_images/weapon_sniperrifle.png'
+import snowball from './weapon_images/weapon_snowball.png'
+import snspistol from './weapon_images/weapon_snspistol.png'
+import snspistolMk2 from './weapon_images/weapon_snspistol_mk2.png'
+import specialcarbine from './weapon_images/weapon_specialcarbine.png'
+import specialcarbineMk2 from './weapon_images/weapon_specialcarbine_mk2.png'
+import stickybomb from './weapon_images/weapon_stickybomb.png'
+import stoneHatchet from './weapon_images/weapon_stone_hatchet.png'
+import stungun from './weapon_images/weapon_stungun.png'
+import stungunMp from './weapon_images/weapon_stungun_mp.png'
+import switchblade from './weapon_images/weapon_switchblade.png'
+import tacticalrifle from './weapon_images/weapon_tacticalrifle.png'
+import tecpistol from './weapon_images/weapon_tecpistol.png'
+import unarmed from './weapon_images/weapon_unarmed.png'
+import vintagepistol from './weapon_images/weapon_vintagepistol.png'
+import wrench from './weapon_images/weapon_wrench.png'
+
+export { gadgetParachute, acidpackage, advancedrifle, appistol, assaultrifle, assaultrifleMk2, assaultshotgun, assaultsmg, autoshotgun, ball, bat, battleaxe, bottle, bullpuprifle, bullpuprifleMk2, bullpupshotgun, bzgas, candycane, carbinerifle, carbinerifleMk2, ceramicpistol, combatmg, combatmgMk2, combatpdw, combatpistol, combatshotgun, compactlauncher, compactrifle, crowbar, dagger, dbshotgun, doubleaction, emplauncher, fertilizercan, fireextinguisher, firework, flare, flaregun, flashlight, gadgetpistol, golfclub, grenade, grenadelauncher, grenadelauncherSmoke, gusenberg, hammer, hatchet, hazardcan, heavypistol, heavyrifle, heavyshotgun, heavysniper, heavysniperMk2, hominglauncher, knife, knuckle, machete, machinepistol, marksmanpistol, marksmanrifle, marksmanrifleMk2, mg, microsmg, militaryrifle, minigun, minismg, molotov, musket, navyrevolver, nightstick, petrolcan, pipebomb, pistol, pistol50, pistolxm3, pistolMk2, poolcue, precisionrifle, proxmine, pumpshotgun, pumpshotgunMk2, railgun, railgunxm3, raycarbine, rayminigun, raypistol, revolver, revolverMk2, rpg, sawnoffshotgun, smg, smgMk2, smokegrenade, sniperrifle, snowball, snspistol, snspistolMk2, specialcarbine, specialcarbineMk2, stickybomb, stoneHatchet, stungun, stungunMp, switchblade, tacticalrifle, tecpistol, unarmed, vintagepistol, wrench };
