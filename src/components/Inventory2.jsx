@@ -748,12 +748,11 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
               quantity: remainingQuantity,
             };
           }
+          trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
         }
         return newQuickSlots;
       });
-      if(!not_Same){
-      trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
-      }
+      
     } else {
       // Handle full quickslot item
       setInventory((prev) => {
