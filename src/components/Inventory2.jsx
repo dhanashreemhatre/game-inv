@@ -263,6 +263,9 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
             };
 
           }
+          else if(targetItem){
+            return newInventory;
+          }
           // If target slot is empty, create new stack
           else if (!targetItem) {
             newInventory[targetIndex] = {
@@ -300,22 +303,24 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
           newInventory[droppedItem.sourceIndex] = targetItem;
           newInventory[targetIndex] = sourceItem;
         }
-  
+        trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
         return newInventory;
       });
     } else if (droppedItem.sourceType === "quickslot") {
       handleQuickSlotToInventoryDrop(droppedItem, targetIndex, targetItem);
+      // trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
     } else if (droppedItem.sourceType === "equipment") {
       // console.log("item dropping", droppedItem.name.length !== 0);
 
       if (droppedItem.name !== "") {
         handleEquipmentToInventoryDrop(droppedItem, targetIndex);
+        trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
       }
 
       
     }
     
-    trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
+    // trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
   };
 
 
@@ -694,7 +699,13 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
     droppedItem,
     targetIndex,
     targetItem,
+   
   ) => {
+    const fromSection = droppedItem.sourceType;
+    const fromSlot = droppedItem.sourceIndex;
+    const toSection = "inventory";
+    const toSlot = targetIndex;
+    let not_Same=false
     if (droppedItem.splitItem) {
       // Handle split item from quickslot
       const sourceQuickSlot = quickSlots[droppedItem.sourceIndex];
@@ -716,6 +727,10 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
             sourceIndex: undefined,
           };
         }
+        else if(targetItem){
+          not_Same=true
+          return newInventory;
+        }
         return newInventory;
       });
 
@@ -724,16 +739,21 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
         const remainingQuantity =
           sourceQuickSlot.quantity - droppedItem.quantity;
 
-        if (remainingQuantity <= 0) {
-          newQuickSlots[droppedItem.sourceIndex] = null;
-        } else {
-          newQuickSlots[droppedItem.sourceIndex] = {
-            ...sourceQuickSlot,
-            quantity: remainingQuantity,
-          };
+        if (!not_Same){
+          if (remainingQuantity <= 0) {
+            newQuickSlots[droppedItem.sourceIndex] = null;
+          } else {
+            newQuickSlots[droppedItem.sourceIndex] = {
+              ...sourceQuickSlot,
+              quantity: remainingQuantity,
+            };
+          }
         }
         return newQuickSlots;
       });
+      if(!not_Same){
+      trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
+      }
     } else {
       // Handle full quickslot item
       setInventory((prev) => {
@@ -786,6 +806,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
         }
         return newInventory;
       });
+      trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
     }
   };
 
@@ -866,6 +887,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
         }
         return newInventory;
       });
+
     }
   };
 
