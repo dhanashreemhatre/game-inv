@@ -189,7 +189,8 @@ export default function AestheticInventory() {
         name: item.name,
         quantity: item.quantity,
         slot: String(slotValue),
-        type:item.type
+        type:item.type,
+        ammo:item.ammo
       },
       from: {
         section: fromSection,
@@ -254,12 +255,12 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
         // If it's a split item
         if (droppedItem.splitItem) {
           const sourceInventoryItem = newInventory[droppedItem.sourceIndex];
-        
+          
           // If target slot has same item type, stack them
           if (targetItem && targetItem.id === droppedItem.id) {
             newInventory[targetIndex] = {
               ...targetItem,
-              quantity: targetItem.quantity + droppedItem.quantity,
+              quantity: parseInt(targetItem.quantity) + parseInt(droppedItem.quantity),
             };
 
           }
@@ -291,11 +292,12 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
   
         // Handle non-split items
         const sourceItem = newInventory[droppedItem.sourceIndex];
-        if (targetItem && targetItem.id === sourceItem?.id) {
+        if (targetItem && targetItem.id === sourceItem?.id && (sourceItem.type !== 'weapon' || targetItem.type !== 'weapon')) {
           // Stack items
+          console.log("stacking items", parseInt(targetItem.quantity) + parseInt(sourceItem.quantity));
           newInventory[targetIndex] = {
             ...targetItem,
-            quantity: targetItem.quantity + sourceItem.quantity,
+            quantity: parseInt(targetItem.quantity) + parseInt(sourceItem.quantity),
           };
           newInventory[droppedItem.sourceIndex] = null;
         } else {
@@ -580,7 +582,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
         if (targetItem && targetItem.id === droppedItem.id) {
           newQuickSlots[targetIndex] = {
             ...targetItem,
-            quantity: targetItem.quantity + droppedItem.quantity,
+            quantity: parseInt(targetItem.quantity) + parseInt(droppedItem.quantity),
           };
         } else if (!targetItem) {
           newQuickSlots[targetIndex] = {
@@ -716,7 +718,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
           // Stack with existing item
           newInventory[targetIndex] = {
             ...targetItem,
-            quantity: targetItem.quantity + droppedItem.quantity,
+            quantity: parseInt(targetItem.quantity) + parseInt(droppedItem.quantity),
           };
         } else if (!targetItem) {
           // Place in empty slot
@@ -757,11 +759,11 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
       // Handle full quickslot item
       setInventory((prev) => {
         const newInventory = [...prev];
-        if (targetItem && targetItem.id === droppedItem.id) {
+        if (targetItem && targetItem.id === droppedItem.id && droppedItem.type !== 'weapon') {
           // Stack with existing item
           newInventory[targetIndex] = {
             ...targetItem,
-            quantity: targetItem.quantity + droppedItem.quantity,
+            quantity: parseInt(targetItem.quantity )+ parseInt(droppedItem.quantity),
           };
           // Clear source quickslot since all items were stacked
           setQuickSlots((prev) => {
@@ -816,11 +818,11 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
     if (droppedItem.splitItem) {
       setQuickSlots((prev) => {
         const newQuickSlots = [...prev];
-        if (targetQuickSlotItem && targetQuickSlotItem.id === droppedItem.id) {
+        if (targetQuickSlotItem && targetQuickSlotItem.id === droppedItem.id ) {
           // Stack with existing quickslot item
           newQuickSlots[targetIndex] = {
             ...targetQuickSlotItem,
-            quantity: targetQuickSlotItem.quantity + droppedItem.quantity,
+            quantity: parseInt(targetQuickSlotItem.quantity )+ parseInt(droppedItem.quantity),
           };
         } else if (!targetQuickSlotItem) {
           // Place in empty quickslot
@@ -912,13 +914,17 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
       slot: item.slot || toSlot + 1
     }, fromSection, toSection, fromSlot, toSlot);
   
-    if (existingItemIndex !== -1) {
+    if (existingItemIndex !== -1 && item.type !== 'weapon') {
+      
       setInventory((prev) =>
+        
         prev.map((inv, idx) =>
           idx === existingItemIndex && inv
-            ? { ...inv, quantity: inv.quantity + quantityToPickup }
+            ? { ...inv, quantity: parseInt(inv.quantity) + parseInt(quantityToPickup) }
             : inv,
+            
         ),
+        
       );
       
   

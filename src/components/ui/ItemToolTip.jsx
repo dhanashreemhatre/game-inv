@@ -9,11 +9,20 @@ const ItemTooltip = ({ item, is_quantity=true }) => {
             <span>{item.quantity}</span>
           </div>
           {item.type && (
+           <>
             <div className="flex justify-between">
               <span>Type:</span>
               <span className="capitalize">{item.type}</span>
             </div>
+             {item.ammo && (
+              <div className="flex justify-between">
+              <span>Ammo:</span>
+              <span className="capitalize">{item.ammo}</span>
+            </div>
+             )}
+           </>
           )}
+          
           {/* {item.slot && (
             <div className="flex justify-between">
               <span>Slot:</span>

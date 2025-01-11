@@ -30,6 +30,7 @@ const formatInventoryData = (data) => {
       type: item.type || "",
       quantity: item.quantity || "",
       slot: item.slot || "",
+      ammo:item.ammo || null,
     })),
     QuickItems: (data.QuickItems || []).map((item, index) => ({
       name: item.name || "",
@@ -37,11 +38,14 @@ const formatInventoryData = (data) => {
       quantity: item.quantity || 1,
       slot: item.slot || (index + 1).toString(),
       id: item.id || "",
+      ammo:item.ammo || null,
     })),
     GroundItems: (data.GroundItems || []).map((item) => ({
       name: item.name || "",
       type: item.type || "",
+      id: item.name || "",
       quantity: item.quantity || "",
+      ammo:item.ammo || null,
     })),
   };
   return formatted;
