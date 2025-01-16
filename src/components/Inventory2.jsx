@@ -315,8 +315,8 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
       // console.log("item dropping", droppedItem.name.length !== 0);
 
       if (droppedItem.name !== "") {
-        handleEquipmentToInventoryDrop(droppedItem, targetIndex);
-        trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
+        handleEquipmentToInventoryDrop(droppedItem, targetIndex,fromSection, toSection, fromSlot, toSlot);
+        // trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
       }
 
       
@@ -325,7 +325,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
     // trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
   };
 
-  const handleEquipmentToQuickslotDrop = (droppedItem, targetIndex) => {
+  const handleEquipmentToQuickslotDrop = (droppedItem, targetIndex,fromSection, toSection, fromSlot, toSlot) => {
     const targetInventoryItem = quickSlots[targetIndex];
     
     if (droppedItem.name === "") {
@@ -341,6 +341,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
           sourceType: undefined,
           sourceIndex: undefined
         };
+        trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
         return newInventory;
       });
   
@@ -363,6 +364,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
             sourceType: undefined,
             sourceIndex: undefined
           };
+          trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
           return newInventory;
         });
   
@@ -375,7 +377,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
   };
 
 
-  const handleEquipmentToInventoryDrop = (droppedItem, targetIndex) => {
+  const handleEquipmentToInventoryDrop = (droppedItem, targetIndex,fromSection, toSection, fromSlot, toSlot) => {
     const targetInventoryItem = inventory[targetIndex];
     
     if (droppedItem.name === "") {
@@ -391,6 +393,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
           sourceType: undefined,
           sourceIndex: undefined
         };
+        trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
         return newInventory;
       });
   
@@ -413,6 +416,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
             sourceType: undefined,
             sourceIndex: undefined
           };
+          trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
           return newInventory;
         });
   
@@ -657,20 +661,20 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
         newQuickSlots[targetIndex] = newQuickSlots[droppedItem.sourceIndex];
         newQuickSlots[droppedItem.sourceIndex] = temp;
       }
-      
+      trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
       return newQuickSlots;
     });
   } else if (droppedItem.sourceType === "inventory") {
-    handleInventoryToQuickSlotDrop(droppedItem, targetIndex);
+    handleInventoryToQuickSlotDrop(droppedItem, targetIndex,fromSection, toSection, fromSlot, toSlot);
   }else if (droppedItem.sourceType === "equipment") {
     // console.log("item dropping", droppedItem.name.length !== 0);
 
     if (droppedItem.name !== "") {
-      handleEquipmentToQuickslotDrop(droppedItem, targetIndex);
-      trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
+      handleEquipmentToQuickslotDrop(droppedItem, targetIndex,fromSection, toSection, fromSlot, toSlot);
+      // trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
     }
   }
-  trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
+  // trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
 };
 
   useEffect(() => {
@@ -868,7 +872,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
     }
   };
 
-  const handleInventoryToQuickSlotDrop = (droppedItem, targetIndex) => {
+  const handleInventoryToQuickSlotDrop = (droppedItem, targetIndex,fromSection, toSection, fromSlot, toSlot) => {
     const targetQuickSlotItem = quickSlots[targetIndex];
     const sourceInventoryItem = inventory[droppedItem.sourceIndex];
 
@@ -943,6 +947,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
           // Just clear the source inventory slot
           newInventory[droppedItem.sourceIndex] = null;
         }
+        trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
         return newInventory;
       });
 
