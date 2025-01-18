@@ -130,7 +130,7 @@ const EquipmentSlot = ({
         </div>
       )}
       
-      {showTooltip && equippedItem && equippedItem.name!==""  && !isDraggingLocal && (
+      {/* {showTooltip && equippedItem && equippedItem.name!==""  && !isDraggingLocal && (
         <div
           style={{
             position: "fixed",
@@ -140,7 +140,7 @@ const EquipmentSlot = ({
         >
           <ItemTooltip item={equippedItem} is_quantity="false" />
         </div>
-      )}
+      )} */}
     </div>
   );
 };
