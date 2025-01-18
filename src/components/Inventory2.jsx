@@ -164,7 +164,7 @@ export default function AestheticInventory() {
     });
   }, []);
 
-  const trackItemMovement = (item, fromSection, toSection, fromSlot, toSlot) => {
+  const trackItemMovement = (item, fromSection, toSection, fromSlot, toSlot,is_swapped=false) => {
     let slotValue;
     let id_data;
     let FromslotValue;
@@ -190,7 +190,8 @@ export default function AestheticInventory() {
         quantity: item.quantity,
         slot: String(slotValue),
         type:item.type,
-        ammo:item.ammo
+        ammo:item.ammo,
+        is_swapped:is_swapped
       },
       from: {
         section: fromSection,
@@ -238,7 +239,8 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
     if (droppedItem.name === "") {
       return
     }
-  
+    let is_swapped=false
+    console.log("is swappes in invenorty drop",is_swapped)
     // Get target slot item
     const targetItem = inventory[targetIndex];
   
@@ -292,7 +294,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
   
         // Handle non-split items
         const sourceItem = newInventory[droppedItem.sourceIndex];
-        if (targetItem && targetItem.id === sourceItem?.id && (sourceItem.type !== 'weapon' || targetItem.type !== 'weapon')) {
+        if (targetItem && targetItem.id === sourceItem?.id && (sourceItem.type !== 'weapon')) {
           // Stack items
           console.log("stacking items", parseInt(targetItem.quantity) + parseInt(sourceItem.quantity));
           newInventory[targetIndex] = {
@@ -300,12 +302,18 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
             quantity: parseInt(targetItem.quantity) + parseInt(sourceItem.quantity),
           };
           newInventory[droppedItem.sourceIndex] = null;
-        } else {
+        } else if (targetItem && sourceItem){
           // Swap items
           newInventory[droppedItem.sourceIndex] = targetItem;
           newInventory[targetIndex] = sourceItem;
+          is_swapped=true
+          console.log("is swappes in invenorty drop swapping items",is_swapped)
         }
-        trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
+        else{
+          newInventory[droppedItem.sourceIndex] = targetItem;
+          newInventory[targetIndex] = sourceItem;
+        }
+        trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot,is_swapped);
         return newInventory;
       });
     } else if (droppedItem.sourceType === "quickslot") {
@@ -326,6 +334,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
   };
 
   const handleEquipmentToQuickslotDrop = (droppedItem, targetIndex,fromSection, toSection, fromSlot, toSlot) => {
+    let is_swapped=false
     const targetInventoryItem = quickSlots[targetIndex];
     
     if (droppedItem.name === "") {
@@ -357,6 +366,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
   
       if (canEquip) {
         // Swap the items
+        is_swapped=true
         setQuickSlots(prev => {
           const newInventory = [...prev];
           newInventory[targetIndex] = {
@@ -364,7 +374,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
             sourceType: undefined,
             sourceIndex: undefined
           };
-          trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
+          trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot,is_swapped);
           return newInventory;
         });
   
@@ -379,7 +389,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
 
   const handleEquipmentToInventoryDrop = (droppedItem, targetIndex,fromSection, toSection, fromSlot, toSlot) => {
     const targetInventoryItem = inventory[targetIndex];
-    
+    let is_swapped=false
     if (droppedItem.name === "") {
       return
     }
@@ -408,6 +418,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
                       targetInventoryItem.slot.toLowerCase() === droppedItem.sourceSlot.toLowerCase();
   
       if (canEquip) {
+        is_swapped=true
         // Swap the items
         setInventory(prev => {
           const newInventory = [...prev];
@@ -416,7 +427,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
             sourceType: undefined,
             sourceIndex: undefined
           };
-          trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
+          trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot,is_swapped);
           return newInventory;
         });
   
@@ -520,7 +531,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
   const handleEquipItem = (item, slotName) => {
     const slot = slotName.toLowerCase();
     if (!item) return;
-  
+    let is_swapped=false
     const fromSection = item.sourceType;
     const fromSlot = item.sourceIndex;
     const toSection = "equipment";
@@ -542,6 +553,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
         // Handle currently equipped item
         if (currentEquipped) {
           if (item.sourceType === "quickslot") {
+            is_swapped=true
             // If item is from quickslot, swap with quickslot
             setQuickSlots((prev) => {
               const newQuickSlots = [...prev];
@@ -590,7 +602,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
           },
         };
       });
-      trackItemMovement(item, fromSection, toSection, fromSlot, toSlot);
+      trackItemMovement(item, fromSection, toSection, fromSlot, toSlot,is_swapped);
       return true;
     } catch (error) {
       console.error("Error equipping item:", error);
@@ -604,28 +616,11 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
   const fromSlot = droppedItem.sourceIndex;
   const toSection = "quickslot";
   const toSlot = targetIndex;
-  console.log(quickSlots[droppedItem.sourceIndex])
+  let is_swapped=false
   if (droppedItem.name === "") {
     return;
   }
-  // if (droppedItem.sourceType === "equipment") {
-  
-  //   // Handle equipment to quickslot
-  //   setQuickSlots((prev) => {
-  //     const newQuickSlots = [...prev];
-  //     newQuickSlots[targetIndex] = {
-  //       ...droppedItem,
-  //       sourceType: undefined,
-  //       sourceIndex: undefined
-  //     };
-  //     return newQuickSlots;
-  //   });
 
-  //   setEquipment((prev) => ({
-  //     ...prev,
-  //     [droppedItem.sourceSlot]: null
-  //   }));
-  // } else 
   if (droppedItem.sourceType === "quickslot") {
     // Existing quickslot logic...
     setQuickSlots((prev) => {
@@ -656,12 +651,20 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
             ...sourceQuickSlot,
             quantity: remainingQuantity,
           }}
-      } else {
+      } else if(droppedItem && newQuickSlots[targetIndex]){
+        console.log("dropped item in quickslot",is_swapped)
+        const temp = newQuickSlots[targetIndex];
+        newQuickSlots[targetIndex] = newQuickSlots[droppedItem.sourceIndex];
+        newQuickSlots[droppedItem.sourceIndex] = temp;
+        is_swapped=true
+        console.log("dropped item in quickslot",is_swapped)
+      }
+      else{
         const temp = newQuickSlots[targetIndex];
         newQuickSlots[targetIndex] = newQuickSlots[droppedItem.sourceIndex];
         newQuickSlots[droppedItem.sourceIndex] = temp;
       }
-      trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
+      trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot,is_swapped);
       return newQuickSlots;
     });
   } else if (droppedItem.sourceType === "inventory") {
@@ -769,6 +772,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
     const toSection = "inventory";
     const toSlot = targetIndex;
     let not_Same=false
+    let is_swapped=false
     if (droppedItem.splitItem) {
       // Handle split item from quickslot
       const sourceQuickSlot = quickSlots[droppedItem.sourceIndex];
@@ -820,6 +824,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
       // Handle full quickslot item
       setInventory((prev) => {
         const newInventory = [...prev];
+       
         if (targetItem && targetItem.id === droppedItem.id && droppedItem.type !== 'weapon') {
           // Stack with existing item
           newInventory[targetIndex] = {
@@ -836,11 +841,13 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
           // Handle swapping or placing in inventory
           if (targetItem) {
             // Swap items
+            is_swapped=true
             newInventory[targetIndex] = {
               ...droppedItem,
               sourceType: undefined,
               sourceIndex: undefined,
             };
+            
             // Move inventory item to quickslot
             setQuickSlots((prev) => {
               const newQuickSlots = [...prev];
@@ -858,7 +865,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
               sourceType: undefined,
               sourceIndex: undefined,
             };
-            // Clear source quickslot
+            // Clear source quickslot,
             setQuickSlots((prev) => {
               const newQuickSlots = [...prev];
               newQuickSlots[droppedItem.sourceIndex] = null;
@@ -868,14 +875,14 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
         }
         return newInventory;
       });
-      trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
+      trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot,is_swapped);
     }
   };
 
   const handleInventoryToQuickSlotDrop = (droppedItem, targetIndex,fromSection, toSection, fromSlot, toSlot) => {
     const targetQuickSlotItem = quickSlots[targetIndex];
     const sourceInventoryItem = inventory[droppedItem.sourceIndex];
-
+    let is_swapped=false
     if (droppedItem.splitItem) {
       setQuickSlots((prev) => {
         const newQuickSlots = [...prev];
@@ -916,8 +923,10 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
       // Handle full inventory item
       setQuickSlots((prev) => {
         const newQuickSlots = [...prev];
+       
         // If there's an item in the target quickslot, we'll swap it
         if (targetQuickSlotItem) {
+          is_swapped=true
           newQuickSlots[targetIndex] = {
             ...sourceInventoryItem,
             sourceType: undefined,
@@ -947,7 +956,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
           // Just clear the source inventory slot
           newInventory[droppedItem.sourceIndex] = null;
         }
-        trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot);
+        trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot,is_swapped);
         return newInventory;
       });
 

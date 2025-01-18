@@ -141,7 +141,7 @@ const InventoryItem = ({
         <span className="text-xs text-gray-400 item-quantity-right"> {item.type !== "clothing" && item.quantity}</span>
       </div>
 
-      {showTooltip && (
+      {/* {showTooltip && (
         <div
           style={{
             position: "fixed",
@@ -151,7 +151,7 @@ const InventoryItem = ({
         >
           <ItemTooltip item={item} />
         </div>
-      )}
+      )} */}
 
       {showQuantitySelector && (
         <QuantitySelector

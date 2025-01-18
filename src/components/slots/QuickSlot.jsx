@@ -122,7 +122,7 @@ const QuickSlot = ({
         )}
       </div>
 
-      {showTooltip && item && (
+      {/* {showTooltip && item && (
         <div
           style={{
             position: "fixed",
@@ -132,7 +132,7 @@ const QuickSlot = ({
         >
           <ItemTooltip item={item} />
         </div>
-      )}
+      )} */}
 
       {showQuantitySelector && item && (
         <QuantitySelector
