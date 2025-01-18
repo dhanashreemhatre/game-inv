@@ -962,6 +962,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
         trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot,is_swapped);
         return newInventory;
       });
+   
 
     }
   };
