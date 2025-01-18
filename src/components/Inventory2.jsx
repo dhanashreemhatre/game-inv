@@ -840,8 +840,10 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
         } else {
           // Handle swapping or placing in inventory
           if (targetItem) {
+            
             // Swap items
             is_swapped=true
+            console.log("i  am swapping from quickslot to inventory",is_swapped)
             newInventory[targetIndex] = {
               ...droppedItem,
               sourceType: undefined,
@@ -873,9 +875,10 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
             });
           }
         }
+        trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot,is_swapped);
         return newInventory;
       });
-      trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot,is_swapped);
+      
     }
   };
 
