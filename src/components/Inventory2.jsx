@@ -928,8 +928,10 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
         const newQuickSlots = [...prev];
        
         // If there's an item in the target quickslot, we'll swap it
-        if (targetQuickSlotItem) {
+        if (targetQuickSlotItem && draggedItem) {
+         
           is_swapped=true
+          console.log("i am swapping from inventory to quickslot",is_swapped)
           newQuickSlots[targetIndex] = {
             ...sourceInventoryItem,
             sourceType: undefined,
