@@ -885,7 +885,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
   const handleInventoryToQuickSlotDrop = (droppedItem, targetIndex, fromSection, toSection, fromSlot, toSlot) => {
     const targetQuickSlotItem = quickSlots[targetIndex];
     const sourceInventoryItem = inventory[droppedItem.sourceIndex];
-    let is_swapped = false; // Initialize is_swapped to false
+    let is_swapped = false; // Local variable to track swapping state
   
     if (droppedItem.splitItem) {
       // Handle split item from inventory
@@ -930,9 +930,7 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
   
         if (targetQuickSlotItem) {
           // Swap items
-          is_swapped = true; // Set is_swapped to true when a swap occurs
-          console.log("Swapping from inventory to quickslot", is_swapped);
-  
+          is_swapped = true; // Correctly update swap state
           newQuickSlots[targetIndex] = {
             ...sourceInventoryItem,
             sourceType: undefined,
@@ -964,13 +962,22 @@ const handleInventoryDrop = (droppedItem, targetIndex) => {
           newInventory[droppedItem.sourceIndex] = null;
         }
   
-        // Track the movement after determining if a swap occurred
-        trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot, is_swapped);
-  
         return newInventory;
       });
     }
+  
+    // Explicitly update droppedItem with the is_swapped value
+    // droppedItem.is_swapped = is_swapped;
+  
+    // Log item movement after updates
+    setTimeout(() => {
+      console.log("Swapping from inventory to quickslot", is_swapped);
+      trackItemMovement(droppedItem, fromSection, toSection, fromSlot, toSlot,is_swapped);
+  
+      
+    }, 0); // Ensure logs happen after React processes state updates
   };
+  
   
 
   const handlePickupItem = (item, index) => {
